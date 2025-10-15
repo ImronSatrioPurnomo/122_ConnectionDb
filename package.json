@@ -1,0 +1,28 @@
+{
+  "name": "3NIMBelakang_ConnectionDb",
+  "version": "1.0.0",
+  "description": "Express JS + MySQL connection with GET endpoint for biodata",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "express",
+    "mysql2",
+    "mahasiswa",
+    "biodata"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.11.3",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
