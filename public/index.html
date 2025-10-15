@@ -4,15 +4,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mahasiswa • Biodata</title>
+
     <!-- Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // extend warna navy biar enak dipakai
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: {
+                900: '#0a1224',
+                800: '#0f1b39',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Background gradient + glow elegan */
+      body.bg-grad {
+        background:
+          radial-gradient(1200px 600px at 105% -5%, rgba(99,102,241,0.18), transparent 60%),
+          radial-gradient(900px 500px at -10% 110%, rgba(56,189,248,0.12), transparent 60%),
+          linear-gradient(180deg, #0a1224 0%, #0f1b39 100%);
+      }
+    </style>
+
     <!-- React 18 + ReactDOM via CDN -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <!-- Babel for in-browser JSX (dev-only) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
-  <body class="bg-gray-50 text-gray-900 min-h-dvh">
+
+  <body class="bg-grad text-gray-100 min-h-dvh relative overflow-x-hidden">
+    <!-- Glow/blur dekoratif -->
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -top-24 -left-24 h-[26rem] w-[26rem] rounded-full bg-indigo-500/30 blur-3xl"></div>
+      <div class="absolute bottom-[-6rem] right-[-6rem] h-[30rem] w-[30rem] rounded-full bg-sky-400/20 blur-3xl"></div>
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-blue-300/10 blur-2xl"></div>
+    </div>
+
     <div id="root"></div>
 
     <script type="text/babel">
@@ -59,27 +93,38 @@
 
         return (
           <div>
-            <header className="px-5 py-6 border-b bg-white sticky top-0 z-10">
+            <header className="px-5 py-6 border-b border-white/10 bg-navy-900/60 backdrop-blur-md sticky top-0 z-10">
               <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
-                <h1 className="text-2xl font-bold">Biodata Mahasiswa</h1>
-                <a className="text-sm text-blue-600 hover:underline" href="/">API Root</a>
+                <h1 className="text-2xl font-semibold tracking-tight">Biodata Mahasiswa</h1>
+                <a className="text-sm text-sky-300 hover:text-sky-200 underline-offset-4 hover:underline" href="/">API Root</a>
               </div>
             </header>
 
             <main className="max-w-5xl mx-auto p-5">
               <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <input
                     value={q}
                     onChange={e => setQ(e.target.value)}
                     placeholder="Cari nama / NIM / kelas…"
-                    className="w-72 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full sm:w-80 px-3 py-2 rounded-xl border border-white/10 bg-white/5 placeholder-gray-300
+                               focus:outline-none focus:ring-2 focus:ring-sky-400/70"
                   />
-                  <button onClick={() => setQ('')} className="px-3 py-2 rounded-lg border text-sm hover:bg-gray-100">Bersihkan</button>
+                  <button
+                    onClick={() => setQ('')}
+                    className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-sm hover:bg-white/10 transition"
+                  >
+                    Bersihkan
+                  </button>
                 </div>
+
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-600">Sortir:</label>
-                  <select value={sort} onChange={e => setSort(e.target.value)} className="px-3 py-2 rounded-lg border border-gray-300">
+                  <span className="text-sm text-gray-300">Sortir:</span>
+                  <select
+                    value={sort}
+                    onChange={e => setSort(e.target.value)}
+                    className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 focus:outline-none focus:ring-2 focus:ring-sky-400/70"
+                  >
                     <option value="id-asc">ID ↑</option>
                     <option value="id-desc">ID ↓</option>
                     <option value="nama-asc">Nama A–Z</option>
@@ -92,30 +137,32 @@
                 </div>
               </div>
 
-              <div className="bg-white border rounded-2xl shadow-sm overflow-hidden">
+              <div className="bg-white/8 border border-white/10 rounded-2xl shadow-xl shadow-black/20 overflow-hidden backdrop-blur-md">
                 {state === 'loading' && (
-                  <div className="p-6 text-center text-gray-600">Memuat data…</div>
+                  <div className="p-6 text-center text-gray-300">Memuat data…</div>
                 )}
                 {state === 'error' && (
-                  <div className="p-6 text-center text-red-600">Gagal memuat data. <button className="underline" onClick={load}>Coba lagi</button></div>
+                  <div className="p-6 text-center text-red-300">
+                    Gagal memuat data. <button className="underline underline-offset-4 hover:text-red-200" onClick={load}>Coba lagi</button>
+                  </div>
                 )}
                 {state === 'ready' && view.length === 0 && (
-                  <div className="p-6 text-center text-gray-600">Tidak ada data.</div>
+                  <div className="p-6 text-center text-gray-300">Tidak ada data.</div>
                 )}
                 {state === 'ready' && view.length > 0 && (
                   <div className="overflow-x-auto">
                     <table className="min-w-full text-sm">
-                      <thead className="bg-gray-50 border-b">
+                      <thead className="bg-white/5 border-b border-white/10">
                         <tr>
-                          <th className="text-left px-4 py-3 font-semibold text-gray-700">ID</th>
-                          <th className="text-left px-4 py-3 font-semibold text-gray-700">Nama</th>
-                          <th className="text-left px-4 py-3 font-semibold text-gray-700">NIM</th>
-                          <th className="text-left px-4 py-3 font-semibold text-gray-700">Kelas</th>
+                          <th className="text-left px-4 py-3 font-semibold text-gray-200">ID</th>
+                          <th className="text-left px-4 py-3 font-semibold text-gray-200">Nama</th>
+                          <th className="text-left px-4 py-3 font-semibold text-gray-200">NIM</th>
+                          <th className="text-left px-4 py-3 font-semibold text-gray-200">Kelas</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y">
+                      <tbody className="divide-y divide-white/10">
                         {view.map(r => (
-                          <tr key={r.id} className="hover:bg-gray-50">
+                          <tr key={r.id} className="hover:bg-white/5">
                             <td className="px-4 py-3">{r.id}</td>
                             <td className="px-4 py-3 font-medium">{r.nama}</td>
                             <td className="px-4 py-3">{r.nim}</td>
@@ -129,8 +176,8 @@
               </div>
             </main>
 
-            <footer className="max-w-5xl mx-auto p-6 text-xs text-gray-500">
-              Sumber data: <code>/api/biodata</code>
+            <footer className="max-w-5xl mx-auto p-6 text-xs text-gray-300">
+              Sumber data: <code className="text-gray-200">/api/biodata</code>
             </footer>
           </div>
         );
