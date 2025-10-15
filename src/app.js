@@ -1,17 +1,25 @@
 /**
  * Simple Express + MySQL (mysql2/promise) starter
- * Repo name suggestion: 3NIMBelakang_ConnectionDb
  */
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const mysql = require('mysql2/promise');
+const path = require('path'); // <-- Tambahin ini di bagian import
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
+
+// ⬇️ Tambahin bagian ini sebelum route API (di bawah middleware)
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// (opsional) route /ui biar gampang akses langsung
+app.get('/ui', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
 
 // Read env vars (with sensible defaults)
 const PORT = process.env.PORT || 3000;
@@ -46,7 +54,7 @@ async function initDb() {
 app.get('/', (_req, res) => {
   res.json({
     status: 'ok',
-    service: '3NIMBelakang_ConnectionDb',
+    service: '122_ConnectionDb',
     endpoints: ['/api/biodata'],
   });
 });
